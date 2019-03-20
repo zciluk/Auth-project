@@ -1,9 +1,9 @@
 import React from 'react';
-
+import { signIn, signOut } from '../actions';
+import {connect } from 'react-redux';
 
 class GoogleAuth extends React.Component {
-    state = { isSignedIn: null,
-                profileUrl: null}
+   
     componentDidMount() {
         window.gapi.load('client:auth2', () => {
             window.gapi.client.init({
@@ -12,17 +12,19 @@ class GoogleAuth extends React.Component {
             }).then(() => {
                 this.auth = window.gapi.auth2.getAuthInstance();
                 this.onAuthChange();
+                this.onAuthChange(this.auth.isSignedIn.get());
                 this.auth.isSignedIn.listen(this.onAuthChange);
             });
         });
 
     }
-    onAuthChange = () => {
-        this.setState({ isSignedIn: this.auth.isSignedIn.get() });
-        if(this.auth.isSignedIn.get()) {
-            this.setState({ profileUrl: this.auth.currentUser.get().getBasicProfile().getImageUrl() });
+    onAuthChange = (isSignedIn) => {
+        if(isSignedIn) {
+            this.props.signIn(this.auth.currentUser.get().getBasicProfile().getImageUrl());
+            //this.setState({ profileUrl: this.auth.currentUser.get().getBasicProfile().getImageUrl() });
         } else {
-            this.setState({ profileUrl: null })
+            this.props.signOut();
+            
         }
     }
     onSignInClick = () => {
@@ -32,9 +34,9 @@ class GoogleAuth extends React.Component {
         this.auth.signOut();
     }
     renderAuthButton() {
-        if (this.state.isSingedIn === null) {
+        if (this.props.isSingedIn === null) {
             return null;
-        } else if (this.state.isSignedIn) {
+        } else if (this.props.isSignedIn) {
             return <button onClick={this.onSignOutClick} className="ui red google button">
             <i className="google icon"/>
              Sign Out 
@@ -48,10 +50,14 @@ class GoogleAuth extends React.Component {
     }
     render() {
         return <div>
-        { this.state.profileUrl && <img alt =" profile image12" className="ui circular  tiny image centered bordered" src={this.state.profileUrl}/>   }
+          { this.props.imageUrl && <img alt =" profile image12" style={{marginBottom: "2em"}} className="ui circular  tiny image centered bordered" src={this.props.imageUrl}/>   }
         <div>{this.renderAuthButton()}</div>
         </div>;
 
     }
 }
- export default GoogleAuth;
+  
+const mapStateToProps = (state) => {
+    return { isSignedIn: state.auth.isSignedIn, imageUrl: state.auth.imageUrl }
+}
+ export default connect(mapStateToProps, { signIn, signOut} )(GoogleAuth);
