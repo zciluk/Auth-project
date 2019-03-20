@@ -1,9 +1,9 @@
 import {SIGN_IN, SIGN_OUT} from './types'
 
-export const signIn = (imageUrl) => {
+export const signIn = (imageUrl, profileName) => {
     return {
         type: SIGN_IN,
-        payload: imageUrl
+        payload: {imageUrl: imageUrl, profileName: profileName}
     };
 };
 
