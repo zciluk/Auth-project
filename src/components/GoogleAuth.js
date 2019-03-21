@@ -5,7 +5,8 @@ import Fade from 'react-reveal';
 class GoogleAuth extends React.Component {
    
     componentDidMount() {
-        window.gapi.load('client:auth2', () => {
+        window.gapi.load('client:auth2', () => {   
+            console.log(this.props.isSignedIn);
             window.gapi.client.init({
                 clientId: '422805623031-9bh2qj3oj5k8qb2k4jvfac5pen06s308.apps.googleusercontent.com',
                 scope: 'email profile'
@@ -35,7 +36,7 @@ class GoogleAuth extends React.Component {
     }
     renderAuthButton() {
         if (this.props.isSingedIn === null) {
-            return null;
+            
         } else if (this.props.isSignedIn) {
             return <button onClick={this.onSignOutClick} className="ui tiny inverted  red button">
             <i className="google  icon"/>
@@ -48,9 +49,25 @@ class GoogleAuth extends React.Component {
              </button>;
         }
     }
+    renderIntro () {
+        if (this.props.isSingedIn !== null) {
+        return <Fade><div style={{paddingTop: "10vh"}}><i className="massive icons">
+        <i className="circular inverted teal map  outline icon"></i>
+        <i className="bottom left corner gem  red icon"></i>
+        </i><h1>
+                  Welcome to Maps app. 
+              </h1>
+              <h3>Please log in to continue. </h3></div>
+        
+          <div>{this.renderAuthButton()}</div> </Fade>;
+         } 
+
+    }
     render() {
         return <div>
-
+            {this.props.isSignedIn === null &&  <div class="ui container dimmer active">
+    <div class="ui large text loader">Loading</div>
+  </div> }
             { this.props.isSignedIn && <Fade><div className="ui medium borderless inverted menu">
                     <item className="item">
                     <label className="ui red tiny label"> 
@@ -59,15 +76,7 @@ class GoogleAuth extends React.Component {
                     <item className="item">{this.renderAuthButton()}</item>
                     </div>
                     </div> </Fade>}
-             { !this.props.isSignedIn && <Fade><div style={{paddingTop: "10vh"}}><i className="massive icons">
-          <i className="circular inverted teal map  outline icon"></i>
-          <i className="bottom left corner gem  red icon"></i>
-          </i><h1>
-                    Welcome to Maps app. 
-                </h1>
-                <h3>Please log in to continue. </h3></div>
-          
-            <div>{this.renderAuthButton()}</div> </Fade>  }
+             { !this.props.isSignedIn && this.props.isSignedIn !== null  && this.renderIntro()  }
          
          
         </div>;
