@@ -6,7 +6,6 @@ class GoogleAuth extends React.Component {
    
     componentDidMount() {
         window.gapi.load('client:auth2', () => {   
-            console.log(this.props.isSignedIn);
             window.gapi.client.init({
                 clientId: '422805623031-9bh2qj3oj5k8qb2k4jvfac5pen06s308.apps.googleusercontent.com',
                 scope: 'email profile'
@@ -65,15 +64,15 @@ class GoogleAuth extends React.Component {
     }
     render() {
         return <div>
-            {this.props.isSignedIn === null &&  <div class="ui container dimmer active">
-    <div class="ui large text loader">Loading</div>
+            {this.props.isSignedIn === null &&  <div className="ui container">
+    <div className="ui large active inverted loader"></div>
   </div> }
-            { this.props.isSignedIn && <Fade><div className="ui medium borderless inverted menu">
-                    <item className="item">
+            { this.props.isSignedIn && <Fade><div className="ui medium borderless inverted menu" style={{margin: 0}}>
+                    <div className="item">
                     <label className="ui red tiny label"> 
-                    <img alt ={this.props.profileName} className="ui right spaced avatar image" src={this.props.imageUrl}/>{this.props.profileName}</label></item>
+                    <img alt ={this.props.profileName} className="ui right spaced avatar image" src={this.props.imageUrl}/>{this.props.profileName}</label></div>
                     <div className="right menu">
-                    <item className="item">{this.renderAuthButton()}</item>
+                    <div className="item">{this.renderAuthButton()}</div>
                     </div>
                     </div> </Fade>}
              { !this.props.isSignedIn && this.props.isSignedIn !== null  && this.renderIntro()  }

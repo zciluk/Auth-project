@@ -1,4 +1,4 @@
-import {SIGN_IN, SIGN_OUT} from './types'
+import {SIGN_IN, SIGN_OUT,  SET_USER_LOCATION } from './types'
 
 export const signIn = (imageUrl, profileName) => {
     return {
@@ -10,5 +10,11 @@ export const signIn = (imageUrl, profileName) => {
 export const signOut = () => {
     return {
         type: SIGN_OUT
+    };
+};
+export const setUserLocation = (lat, long) => {
+    return {
+        type: SET_USER_LOCATION,
+        payload: {lat: lat ,long: long}
     };
 };
