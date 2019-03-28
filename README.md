@@ -1,4 +1,4 @@
-App presenting Google Oauth usage with Redux state handling. UI made using Semantic UI. 
+App presenting Google Oauth usage with Redux state handling and Leflet maps usage on both desktop and mobile devices with customization and data. UI made using Semantic UI. 
 
 ## Available Scripts
 
