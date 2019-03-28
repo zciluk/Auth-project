@@ -5,19 +5,29 @@ import Fade from 'react-reveal';
 class GoogleAuth extends React.Component {
    
     componentDidMount() {
-        window.gapi.load('client:auth2', () => {   
-            window.gapi.client.init({
-                clientId: '422805623031-9bh2qj3oj5k8qb2k4jvfac5pen06s308.apps.googleusercontent.com',
-                scope: 'email profile'
+        try {
+            this.authCall();
+          } catch (e) {
+            alert(e.name + ': ' + e.message);
+          }
+        
+    };
+
+    authCall = () => {
+            window.gapi.load('client:auth2', () => {   
+                window.gapi.client.init({
+                    clientId: '422805623031-9bh2qj3oj5k8qb2k4jvfac5pen06s308.apps.googleusercontent.com',
+                    scope: 'email profile',
             }).then(() => {
                 this.auth = window.gapi.auth2.getAuthInstance();
                 this.onAuthChange();
                 this.onAuthChange(this.auth.isSignedIn.get());
                 this.auth.isSignedIn.listen(this.onAuthChange);
-            });
-        });
+              });
+           
+     })}
 
-    }
+
     onAuthChange = (isSignedIn) => {
         if(isSignedIn) {
             this.props.signIn(this.auth.currentUser.get().getBasicProfile().getImageUrl(), this.auth.currentUser.get().getBasicProfile().getName());
@@ -63,11 +73,11 @@ class GoogleAuth extends React.Component {
 
     }
     render() {
-        return <div>
+        return <div >
             {this.props.isSignedIn === null &&  <div className="ui container">
     <div className="ui large active inverted loader"></div>
   </div> }
-            { this.props.isSignedIn && <Fade><div className="ui medium borderless inverted menu" style={{margin: 0}}>
+            { this.props.isSignedIn && <Fade><div className="ui medium borderless inverted menu" style={{ height: "8vh" ,padding: 0, margin: 0,borderRadius: 0, zIndex: 999}}>
                     <div className="item">
                     <label className="ui red tiny label"> 
                     <img alt ={this.props.profileName} className="ui right spaced avatar image" src={this.props.imageUrl}/>{this.props.profileName}</label></div>
